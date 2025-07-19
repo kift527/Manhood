@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Manho</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #0f0f0f; color: #fff; }
+    header { background: #1a1a1a; padding: 20px; text-align: center; font-size: 28px; font-weight: bold; color: #ff6b6b; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .cover { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+    .description { color: #ccc; margin-bottom: 30px; }
+    .chapter-list a { display: block; background: #1f1f1f; color: #fff; text-decoration: none; padding: 15px; border-radius: 6px; margin-bottom: 10px; transition: 0.3s; }
+    .chapter-list a:hover { background: #ff6b6b; }
+    .reader { display: none; text-align: center; }
+    .reader img { width: 100%; max-width: 800px; margin-bottom: 15px; border-radius: 10px; }
+    .back-btn { background: #ff6b6b; color: #fff; padding: 10px 20px; border: none; margin-bottom: 20px; cursor: pointer; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <header>Modern Manho</header>
+  <div class="container">
+    <img src="https://via.placeholder.com/800x400?text=غلاف+المانهو" class="cover" alt="غلاف المانهو">
+    <div class="description">
+      مانهو مشوقة مليئة بالإثارة والأحداث، تابع الفصول لتعرف القصة الكاملة!
+    </div>
+    <div class="chapter-list" id="chapters">
+      <a href="#" onclick="openChapter(1)">الفصل الأول</a>
+      <a href="#" onclick="openChapter(2)">الفصل الثاني</a>
+    </div>
+    <div class="reader" id="reader">
+      <button class="back-btn" onclick="closeChapter()">رجوع للقائمة</button>
+      <div id="chapter-images"></div>
+    </div>
+  </div>
+  <script>
+    const chapters = {
+      1: [
+        "https://via.placeholder.com/800x1200?text=الفصل+الأول+-+صفحة+1",
+        "https://via.placeholder.com/800x1200?text=الفصل+الأول+-+صفحة+2"
+      ],
+      2: [
+        "https://via.placeholder.com/800x1200?text=الفصل+الثاني+-+صفحة+1",
+        "https://via.placeholder.com/800x1200?text=الفصل+الثاني+-+صفحة+2"
+      ]
+    };
+
+    function openChapter(num) {
+      document.getElementById('chapters').style.display = 'none';
+      document.getElementById('reader').style.display = 'block';
+      const container = document.getElementById('chapter-images');
+      container.innerHTML = '';
+      chapters[num].forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        container.appendChild(img);
+      });
+    }
+
+    function closeChapter() {
+      document.getElementById('reader').style.display = 'none';
+      document.getElementById('chapters').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
