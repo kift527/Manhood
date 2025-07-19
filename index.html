@@ -1,11 +1,255 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>موقعي الأول</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>موقع مانهو مودرن</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+  /* الشريط الجانبي */
+  nav {
+    width: 280px;
+    background: #1f1f1f;
+    padding: 20px;
+    overflow-y: auto;
+    border-left: 3px solid #ff4757;
+  }
+  nav h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+    color: #ff4757;
+  }
+  nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  nav ul li {
+    margin-bottom: 12px;
+  }
+  nav ul li button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 12px 15px;
+    text-align: right;
+    font-size: 18px;
+    color: #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  nav ul li button:hover,
+  nav ul li button.active {
+    background: #ff4757;
+    color: #fff;
+  }
+  /* المحتوى الرئيسي */
+  main {
+    flex: 1;
+    background: #181818;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  main header {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ff6b81;
+  }
+  /* قارئ الفصل */
+  #chapter-reader {
+    width: 100%;
+    max-width: 700px;
+  }
+  #chapter-reader img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(255,71,87,0.3);
+  }
+  /* أزرار التنقل */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    max-width: 700px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .nav-buttons button {
+    background: #ff4757;
+    border: none;
+    padding: 12px 22px;
+    color: white;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .nav-buttons button:disabled {
+    background: #555;
+    cursor: default;
+  }
+  .nav-buttons button:hover:not(:disabled) {
+    background: #ff6b81;
+  }
+  /* استجابة للموبايل */
+  @media(max-width: 768px) {
+    body {
+      flex-direction: column;
+    }
+    nav {
+      width: 100%;
+      border-left: none;
+      border-bottom: 3px solid #ff4757;
+      display: flex;
+      overflow-x: auto;
+    }
+    nav ul {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    nav ul li {
+      margin: 0 10px 0 0;
+      flex: 0 0 auto;
+    }
+    nav ul li button {
+      padding: 10px 16px;
+      font-size: 16px;
+      white-space: nowrap;
+    }
+    main {
+      height: calc(100vh - 70px);
+      padding: 10px;
+    }
+    #chapter-reader img {
+      margin-bottom: 10px;
+    }
+  }
+</style>
 </head>
 <body>
-    <h1>أهلاً بك في موقعي على Netlify</h1>
-    <p>هذه أول صفحة.</p>
+  <nav>
+    <h2>قائمة الفصول</h2>
+    <ul id="chapter-list">
+      <!-- سيتم توليد الفصول هنا -->
+    </ul>
+  </nav>
+  <main>
+    <header id="chapter-title">اختر فصلاً للقراءة</header>
+    <div id="chapter-reader"></div>
+    <div class="nav-buttons">
+      <button id="prev-btn" disabled>السابق</button>
+      <button id="next-btn" disabled>التالي</button>
+    </div>
+  </main>
+
+<script>
+  const chapters = {
+    1: {
+      title: "الفصل الأول",
+      images: [
+        "https://via.placeholder.com/700x1000?text=الفصل+الأول+-+صفحة+1",
+        "https://via.placeholder.com/700x1000?text=الفصل+الأول+-+صفحة+2",
+        "https://via.placeholder.com/700x1000?text=الفصل+الأول+-+صفحة+3"
+      ]
+    },
+    2: {
+      title: "الفصل الثاني",
+      images: [
+        "https://via.placeholder.com/700x1000?text=الفصل+الثاني+-+صفحة+1",
+        "https://via.placeholder.com/700x1000?text=الفصل+الثاني+-+صفحة+2"
+      ]
+    },
+    3: {
+      title: "الفصل الثالث",
+      images: [
+        "https://via.placeholder.com/700x1000?text=الفصل+الثالث+-+صفحة+1",
+        "https://via.placeholder.com/700x1000?text=الفصل+الثالث+-+صفحة+2",
+        "https://via.placeholder.com/700x1000?text=الفصل+الثالث+-+صفحة+3",
+        "https://via.placeholder.com/700x1000?text=الفصل+الثالث+-+صفحة+4"
+      ]
+    }
+  };
+
+  const chapterList = document.getElementById("chapter-list");
+  const chapterReader = document.getElementById("chapter-reader");
+  const chapterTitle = document.getElementById("chapter-title");
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
+
+  let currentChapter = null;
+  let currentPage = 0;
+
+  // إنشاء قائمة الفصول في الشريط الجانبي
+  for (const [num, chapter] of Object.entries(chapters)) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.textContent = chapter.title;
+    btn.onclick = () => openChapter(parseInt(num));
+    li.appendChild(btn);
+    chapterList.appendChild(li);
+  }
+
+  function openChapter(num) {
+    currentChapter = num;
+    currentPage = 0;
+    updateChapterView();
+    updateButtons();
+    highlightActiveChapter();
+  }
+
+  function updateChapterView() {
+    chapterTitle.textContent = chapters[currentChapter].title;
+    chapterReader.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = chapters[currentChapter].images[currentPage];
+    img.alt = `${chapters[currentChapter].title} - صفحة ${currentPage + 1}`;
+    chapterReader.appendChild(img);
+  }
+
+  function updateButtons() {
+    prevBtn.disabled = currentPage === 0;
+    nextBtn.disabled = currentPage === chapters[currentChapter].images.length - 1;
+  }
+
+  prevBtn.onclick = () => {
+    if (currentPage > 0) {
+      currentPage--;
+      updateChapterView();
+      updateButtons();
+    }
+  };
+  nextBtn.onclick = () => {
+    if (currentPage < chapters[currentChapter].images.length - 1) {
+      currentPage++;
+      updateChapterView();
+      updateButtons();
+    }
+  };
+
+  function highlightActiveChapter() {
+    [...chapterList.querySelectorAll("button")].forEach((btn, i) => {
+      btn.classList.toggle("active", i + 1 === currentChapter);
+    });
+  }
+</script>
 </body>
 </html>
