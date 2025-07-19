@@ -1,66 +1,200 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Manho</title>
-  <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #0f0f0f; color: #fff; }
-    header { background: #1a1a1a; padding: 20px; text-align: center; font-size: 28px; font-weight: bold; color: #ff6b6b; }
-    .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-    .cover { width: 100%; border-radius: 10px; margin-bottom: 20px; }
-    .description { color: #ccc; margin-bottom: 30px; }
-    .chapter-list a { display: block; background: #1f1f1f; color: #fff; text-decoration: none; padding: 15px; border-radius: 6px; margin-bottom: 10px; transition: 0.3s; }
-    .chapter-list a:hover { background: #ff6b6b; }
-    .reader { display: none; text-align: center; }
-    .reader img { width: 100%; max-width: 800px; margin-bottom: 15px; border-radius: 10px; }
-    .back-btn { background: #ff6b6b; color: #fff; padding: 10px 20px; border: none; margin-bottom: 20px; cursor: pointer; border-radius: 5px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>موقع مانهو بسيط</title>
+<style>
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212; color: #eee;
+  }
+  header {
+    background: #1f1f1f; padding: 15px; text-align: center; font-size: 26px;
+    font-weight: bold; color: #ff4757;
+  }
+  main {
+    max-width: 900px; margin: 20px auto; padding: 0 15px;
+  }
+  section.manho {
+    background: #1e1e1e; margin-bottom: 25px; border-radius: 8px;
+    padding: 15px 20px;
+  }
+  section.manho h2 {
+    margin-top: 0; margin-bottom: 10px; color: #ff6b81;
+  }
+  ul.chapter-list {
+    list-style: none; padding: 0;
+  }
+  ul.chapter-list li {
+    margin-bottom: 8px;
+  }
+  ul.chapter-list li button {
+    background: transparent; border: 1px solid #ff4757; border-radius: 6px;
+    color: #ff4757; padding: 8px 14px; font-size: 16px; cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    width: 100%;
+    text-align: right;
+  }
+  ul.chapter-list li button:hover {
+    background: #ff4757; color: #fff;
+  }
+  /* قارئ الفصل */
+  #reader {
+    display: none; margin-top: 30px; text-align: center;
+  }
+  #reader button.close-btn {
+    background: #ff4757; border: none; color: white; padding: 10px 18px;
+    border-radius: 6px; cursor: pointer; margin-bottom: 15px;
+  }
+  #reader img {
+    max-width: 100%; border-radius: 8px; box-shadow: 0 0 12px #ff4757;
+  }
+  /* أزرار تنقل الصور */
+  #reader .nav-buttons {
+    margin-top: 15px; display: flex; justify-content: center; gap: 20px;
+  }
+  #reader .nav-buttons button {
+    background: #ff4757; border: none; color: white; padding: 8px 16px;
+    border-radius: 6px; cursor: pointer; font-size: 16px;
+  }
+  #reader .nav-buttons button:disabled {
+    background: #770000; cursor: default;
+  }
+  /* متجاوب */
+  @media (max-width: 600px) {
+    ul.chapter-list li button {
+      font-size: 14px; padding: 8px 10px;
+    }
+    header {
+      font-size: 22px;
+    }
+  }
+</style>
 </head>
 <body>
-  <header>Modern Manho</header>
-  <div class="container">
-    <img src="https://via.placeholder.com/800x400?text=غلاف+المانهو" class="cover" alt="غلاف المانهو">
-    <div class="description">
-      مانهو مشوقة مليئة بالإثارة والأحداث، تابع الفصول لتعرف القصة الكاملة!
-    </div>
-    <div class="chapter-list" id="chapters">
-      <a href="#" onclick="openChapter(1)">الفصل الأول</a>
-      <a href="#" onclick="openChapter(2)">الفصل الثاني</a>
-    </div>
-    <div class="reader" id="reader">
-      <button class="back-btn" onclick="closeChapter()">رجوع للقائمة</button>
-      <div id="chapter-images"></div>
+<header>موقع مانهو بسيط</header>
+<main>
+  <div id="manhos-container">
+    <!-- مانهو وقصصهم ستظهر هنا -->
+  </div>
+
+  <div id="reader">
+    <button class="close-btn" onclick="closeReader()">رجوع للقائمة</button>
+    <img id="reader-image" src="" alt="صفحة الفصل" />
+    <div class="nav-buttons">
+      <button id="prev-page" onclick="changePage(-1)">السابق</button>
+      <button id="next-page" onclick="changePage(1)">التالي</button>
     </div>
   </div>
-  <script>
-    const chapters = {
-      1: [
-        "https://via.placeholder.com/800x1200?text=الفصل+الأول+-+صفحة+1",
-        "https://via.placeholder.com/800x1200?text=الفصل+الأول+-+صفحة+2"
-      ],
-      2: [
-        "https://via.placeholder.com/800x1200?text=الفصل+الثاني+-+صفحة+1",
-        "https://via.placeholder.com/800x1200?text=الفصل+الثاني+-+صفحة+2"
+</main>
+
+<script>
+  // بيانات المانهو والفصول مع روابط الصور (غيّر الصور بروابطك الحقيقية)
+  const manhos = [
+    {
+      title: "مانهو 1",
+      chapters: [
+        {
+          title: "الفصل الأول",
+          images: [
+            "https://via.placeholder.com/800x1200?text=مانهو+1+-+الفصل+1+-+صفحة+1",
+            "https://via.placeholder.com/800x1200?text=مانهو+1+-+الفصل+1+-+صفحة+2",
+            "https://via.placeholder.com/800x1200?text=مانهو+1+-+الفصل+1+-+صفحة+3"
+          ]
+        },
+        {
+          title: "الفصل الثاني",
+          images: [
+            "https://via.placeholder.com/800x1200?text=مانهو+1+-+الفصل+2+-+صفحة+1",
+            "https://via.placeholder.com/800x1200?text=مانهو+1+-+الفصل+2+-+صفحة+2"
+          ]
+        }
       ]
-    };
+    },
+    {
+      title: "مانهو 2",
+      chapters: [
+        {
+          title: "الفصل الأول",
+          images: [
+            "https://via.placeholder.com/800x1200?text=مانهو+2+-+الفصل+1+-+صفحة+1",
+            "https://via.placeholder.com/800x1200?text=مانهو+2+-+الفصل+1+-+صفحة+2"
+          ]
+        }
+      ]
+    }
+  ];
 
-    function openChapter(num) {
-      document.getElementById('chapters').style.display = 'none';
-      document.getElementById('reader').style.display = 'block';
-      const container = document.getElementById('chapter-images');
-      container.innerHTML = '';
-      chapters[num].forEach(src => {
-        const img = document.createElement('img');
-        img.src = src;
-        container.appendChild(img);
+  const container = document.getElementById("manhos-container");
+  const reader = document.getElementById("reader");
+  const readerImage = document.getElementById("reader-image");
+  const prevBtn = document.getElementById("prev-page");
+  const nextBtn = document.getElementById("next-page");
+
+  let currentManhoIndex = null;
+  let currentChapterIndex = null;
+  let currentPageIndex = 0;
+
+  // بناء واجهة القائمة
+  function buildManhoList() {
+    manhos.forEach((manho, mIdx) => {
+      const section = document.createElement("section");
+      section.classList.add("manho");
+
+      const h2 = document.createElement("h2");
+      h2.textContent = manho.title;
+      section.appendChild(h2);
+
+      const ul = document.createElement("ul");
+      ul.classList.add("chapter-list");
+
+      manho.chapters.forEach((chapter, cIdx) => {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.textContent = chapter.title;
+        btn.onclick = () => openChapter(mIdx, cIdx);
+        li.appendChild(btn);
+        ul.appendChild(li);
       });
-    }
 
-    function closeChapter() {
-      document.getElementById('reader').style.display = 'none';
-      document.getElementById('chapters').style.display = 'block';
-    }
-  </script>
+      section.appendChild(ul);
+      container.appendChild(section);
+    });
+  }
+
+  // فتح القارئ
+  function openChapter(manhoIdx, chapterIdx) {
+    currentManhoIndex = manhoIdx;
+    currentChapterIndex = chapterIdx;
+    currentPageIndex = 0;
+    showPage();
+    reader.style.display = "block";
+    container.style.display = "none";
+  }
+
+  // عرض صفحة معينة
+  function showPage() {
+    const chapter = manhos[currentManhoIndex].chapters[currentChapterIndex];
+    readerImage.src = chapter.images[currentPageIndex];
+    readerImage.alt = `${chapter.title} - صفحة ${currentPageIndex + 1}`;
+    prevBtn.disabled = currentPageIndex === 0;
+    nextBtn.disabled = currentPageIndex === chapter.images.length - 1;
+  }
+
+  // تغيير الصفحة
+  function changePage(dir) {
+    currentPageIndex += dir;
+    showPage();
+  }
+
+  // إغلاق القارئ والعودة للقائمة
+  function closeReader() {
+    reader.style.display = "none";
+    container.style.display = "block";
+  }
+
+  buildManhoList();
+</script>
 </body>
 </html>
