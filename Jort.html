@@ -1,431 +1,142 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>موقع مانهو موبايل</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>موقع مانهو</title>
 <style>
-  /* Reset بسيط */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #121212; color: #eee; -webkit-font-smoothing: antialiased;
-  }
-  header {
-    background: #ff4757; color: white; padding: 12px 15px;
-    text-align: center; font-size: 24px; font-weight: bold;
-    position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;
-  }
-  nav {
-    position: fixed; bottom: 0; left: 0; width: 100%;
-    background: #1e1e1e; display: flex; justify-content: space-around;
-    padding: 8px 0; z-index: 1000; border-top: 1px solid #ff4757;
-  }
-  nav button {
-    background: none; border: none; color: #bbb;
-    font-size: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center;
-  }
-  nav button.active,
-  nav button:hover {
-    color: #ff6b81;
-  }
-  nav button svg {
-    width: 24px; height: 24px; margin-bottom: 4px;
-    fill: currentColor;
-  }
-  main {
-    padding: 70px 15px 70px; /* أعلى ثابت + أسفل ثابت */
-    max-width: 480px; margin: 0 auto;
-  }
-  /* صفحة رئيسية */
-  #home .manho-card {
-    background: #222; border-radius: 12px; margin-bottom: 15px;
-    display: flex; gap: 15px; cursor: pointer;
-    padding: 10px;
-    align-items: center;
-    transition: background 0.3s;
-  }
-  #home .manho-card:hover {
-    background: #ff4757;
-  }
-  #home .manho-cover {
-    width: 90px; height: 130px; object-fit: cover; border-radius: 10px;
-    flex-shrink: 0;
-  }
-  #home .manho-info {
-    flex-grow: 1;
-  }
-  #home .manho-title {
-    font-size: 18px; font-weight: bold; color: #ff6b81;
-    margin-bottom: 6px;
-  }
-  #home .manho-desc {
-    font-size: 13px; color: #ccc; line-height: 1.3;
-  }
-  /* صفحة تفاصيل المانهو */
-  #manho-detail {
-    display: none;
-  }
-  #manho-detail.active {
-    display: block;
-  }
-  #manho-detail .cover-large {
-    width: 100%; max-height: 300px; object-fit: cover;
-    border-radius: 12px; margin-bottom: 12px;
-  }
-  #manho-detail h2 {
-    color: #ff6b81;
-    margin: 0 0 12px 0;
-    font-size: 22px;
-  }
-  #manho-detail .description {
-    font-size: 14px;
-    color: #ddd;
-    margin-bottom: 15px;
-  }
-  #manho-detail ul.chapter-list {
-    list-style: none; padding: 0;
-  }
-  #manho-detail ul.chapter-list li {
-    margin-bottom: 8px;
-  }
-  #manho-detail ul.chapter-list li button {
-    width: 100%; text-align: right;
-    background: transparent; border: 1.5px solid #ff4757;
-    border-radius: 8px; color: #ff4757;
-    padding: 10px; font-size: 16px; cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-  }
-  #manho-detail ul.chapter-list li button:hover {
-    background: #ff4757; color: white;
-  }
-  /* صفحة الفصول الجديدة */
-  #latest-chapters {
-    display: none;
-  }
-  #latest-chapters.active {
-    display: block;
-  }
-  #latest-chapters ul {
-    list-style: none; padding: 0;
-  }
-  #latest-chapters li {
-    background: #222; margin-bottom: 15px;
-    border-radius: 12px;
-    display: flex; gap: 15px; padding: 10px;
-    cursor: pointer;
-    align-items: center;
-    transition: background 0.3s;
-  }
-  #latest-chapters li:hover {
-    background: #ff4757; color: white;
-  }
-  #latest-chapters img {
-    width: 90px; height: 130px;
-    border-radius: 12px; object-fit: cover;
-    flex-shrink: 0;
-  }
-  #latest-chapters .chapter-info {
-    flex-grow: 1;
-  }
-  #latest-chapters .chapter-title {
-    font-weight: bold; font-size: 17px; margin-bottom: 4px;
-  }
-  #latest-chapters .manho-name {
-    font-size: 13px; color: #ccc;
-  }
-  /* قارئ الفصل */
-  #reader {
-    display: none;
-    padding-top: 10px;
-  }
-  #reader.active {
-    display: block;
-  }
-  #reader button.close-btn {
-    background: #ff4757;
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    width: 100%;
-    font-size: 18px;
-  }
-  #reader img {
-    width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 0 15px #ff4757;
-  }
-  #reader .nav-buttons {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  #reader .nav-buttons button {
-    background: #ff4757;
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 16px;
-    flex-grow: 1;
-  }
-  #reader .nav-buttons button:disabled {
-    background: #770000;
-    cursor: default;
-  }
+body {margin:0;font-family:'Segoe UI',sans-serif;background:#0d0d0d;color:#fff;}
+header {position:fixed;top:0;left:0;right:0;background:#1c1c1c;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;z-index:1000;border-bottom:2px solid #ff4757;}
+header h1 {margin:0;font-size:20px;color:#ff4757;}
+header input {flex:1;margin-left:10px;padding:8px;border:none;border-radius:6px;background:#2a2a2a;color:#fff;}
+nav {position:fixed;bottom:0;left:0;right:0;background:#1c1c1c;display:flex;justify-content:space-around;padding:10px 0;border-top:2px solid #ff4757;}
+nav button {background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;}
+nav button.active {color:#ff4757;}
+main {padding:65px 10px 70px;max-width:500px;margin:auto;}
+.section {display:none;}
+.section.active {display:block;}
+.card {background:#1c1c1c;margin-bottom:15px;border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.4);}
+.card img {width:100%;display:block;}
+.card h3 {margin:10px;font-size:18px;color:#ff6b81;}
+.card p {margin:0 10px 10px;font-size:14px;color:#ccc;line-height:1.4;}
+button.chapter-btn {width:100%;padding:10px;margin:5px 0;background:#ff4757;border:none;border-radius:8px;color:#fff;font-size:16px;}
+#reader img {width:100%;border-radius:10px;margin-bottom:10px;}
+#reader .nav-buttons {display:flex;justify-content:space-between;gap:10px;}
+#reader .nav-buttons button {flex:1;background:#ff4757;border:none;color:#fff;padding:10px;border-radius:8px;}
 </style>
 </head>
 <body>
 
-<header>موقع مانهو للموبايل</header>
+<header>
+  <h1>مانهو</h1>
+  <input type="text" id="search" placeholder="ابحث عن مانهو...">
+</header>
 
 <nav>
-  <button id="btn-home" class="active" aria-label="الرئيسية" onclick="switchSection('home')">
-    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-    الرئيسية
-  </button>
-  <button id="btn-manho" aria-label="المانهو" onclick="switchSection('manho-detail')">
-    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
-    المانهو
-  </button>
-  <button id="btn-latest" aria-label="الفصول الجديدة" onclick="switchSection('latest-chapters')">
-    <svg viewBox="0 0 24 24"><path d="M12 8v5l4 2"/></svg>
-    فصول جديدة
-  </button>
+  <button id="btn-home" class="active" onclick="switchSection('home')">الرئيسية</button>
+  <button id="btn-manho" onclick="switchSection('manho')">المانهو</button>
+  <button id="btn-latest" onclick="switchSection('latest')">فصول جديدة</button>
 </nav>
 
 <main>
-  <!-- الصفحة الرئيسية -->
   <section id="home" class="section active"></section>
-
-  <!-- تفاصيل المانهو -->
-  <section id="manho-detail" class="section"></section>
-
-  <!-- الفصول الجديدة -->
-  <section id="latest-chapters" class="section"></section>
-
-  <!-- قارئ الفصل -->
+  <section id="manho" class="section"></section>
+  <section id="latest" class="section"></section>
   <section id="reader" class="section"></section>
 </main>
 
 <script>
-  const manhos = [
-    {
-      id: 1,
-      title: "مانهو القمر",
-      cover: "https://via.placeholder.com/200x280?text=مانهو+القمر",
-      description: "قصة مشوقة عن عالم مليء بالمغامرات الغامضة تحت ضوء القمر.",
-      chapters: [
-        {
-          id: 101,
-          title: "الفصل الأول",
-          images: [
-            "https://via.placeholder.com/800x1200?text=القمر+-+الفصل+1+-+صفحة+1",
-            "https://via.placeholder.com/800x1200?text=القمر+-+الفصل+1+-+صفحة+2",
-            "https://via.placeholder.com/800x1200?text=القمر+-+الفصل+1+-+صفحة+3"
-          ]
-        },
-        {
-          id: 102,
-          title: "الفصل الثاني",
-          images: [
-            "https://via.placeholder.com/800x1200?text=القمر+-+الفصل+2+-+صفحة+1",
-            "https://via.placeholder.com/800x1200?text=القمر+-+الفصل+2+-+صفحة+2"
-          ]
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: "مانهو الشروق",
-      cover: "https://via.placeholder.com/200x280?text=مانهو+الشروق",
-      description: "رحلة بطلنا مع بداية شروق الشمس في عالم جديد مليء بالتحديات.",
-      chapters: [
-        {
-          id: 201,
-          title: "الفصل الأول",
-          images: [
-            "https://via.placeholder.com/800x1200?text=الشروق+-+الفصل+1+-+صفحة+1",
-            "https://via.placeholder.com/800x1200?text=الشروق+-+الفصل+1+-+صفحة+2"
-          ]
-        }
-      ]
+const manhos = [
+  {id:1,title:"مانهو القمر",cover:"https://via.placeholder.com/400x600?text=القمر",description:"قصة مثيرة عن مغامرات تحت ضوء القمر.",chapters:[
+    {id:101,title:"الفصل الأول",images:["https://via.placeholder.com/800x1200?text=الفصل1-1","https://via.placeholder.com/800x1200?text=الفصل1-2"]},
+    {id:102,title:"الفصل الثاني",images:["https://via.placeholder.com/800x1200?text=الفصل2-1"]}
+  ]},
+  {id:2,title:"مانهو الشروق",cover:"https://via.placeholder.com/400x600?text=الشروق",description:"رحلة مليئة بالتحديات مع شروق الشمس.",chapters:[
+    {id:201,title:"الفصل الأول",images:["https://via.placeholder.com/800x1200?text=الفصل1-1"]}
+  ]}
+];
+
+let currentManhoId = null, currentChapterId = null, currentPage = 0;
+
+const sections = {
+  home: document.getElementById('home'),
+  manho: document.getElementById('manho'),
+  latest: document.getElementById('latest'),
+  reader: document.getElementById('reader')
+};
+
+function switchSection(sec){
+  Object.values(sections).forEach(s=>s.classList.remove('active'));
+  sections[sec].classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+sec).classList.add('active');
+}
+
+function buildHome(filter=""){
+  sections.home.innerHTML="";
+  manhos.filter(m=>m.title.includes(filter)).forEach(m=>{
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`<img src="${m.cover}"><h3>${m.title}</h3><p>${m.description}</p>`;
+    card.onclick=()=>{currentManhoId=m.id;buildManho();switchSection('manho');};
+    sections.home.appendChild(card);
+  });
+}
+
+function buildManho(){
+  const m=manhos.find(x=>x.id===currentManhoId);
+  sections.manho.innerHTML=`<h2 style="color:#ff6b81">${m.title}</h2><img src="${m.cover}" width="100%"><p>${m.description}</p>`+
+    m.chapters.map(ch=>`<button class="chapter-btn" onclick="openChapter(${m.id},${ch.id})">${ch.title}</button>`).join('');
+}
+
+function buildLatest(){
+  sections.latest.innerHTML="";
+  manhos.forEach(m=>{
+    if(m.chapters.length>0){
+      const ch=m.chapters[m.chapters.length-1];
+      const card=document.createElement('div');
+      card.className='card';
+      card.innerHTML=`<img src="${m.cover}"><h3>${ch.title}</h3><p>${m.title}</p>`;
+      card.onclick=()=>openChapter(m.id,ch.id);
+      sections.latest.appendChild(card);
     }
-  ];
+  });
+}
 
-  // المتغيرات للحالة الحالية
-  let currentSection = "home";
-  let currentManhoId = null;
-  let currentChapterId = null;
-  let currentPageIndex = 0;
+function openChapter(mId,cId){
+  const m=manhos.find(x=>x.id===mId);
+  const ch=m.chapters.find(c=>c.id===cId);
+  currentManhoId=mId;currentChapterId=cId;currentPage=0;
+  updateReader();
+  switchSection('reader');
+}
 
-  // اختيارات DOM
-  const sections = {
-    home: document.getElementById("home"),
-    manhoDetail: document.getElementById("manho-detail"),
-    latestChapters: document.getElementById("latest-chapters"),
-    reader: document.getElementById("reader"),
-  };
-  const navButtons = {
-    home: document.getElementById("btn-home"),
-    manhoDetail: document.getElementById("btn-manho"),
-    latestChapters: document.getElementById("btn-latest"),
-  };
+function updateReader(){
+  const m=manhos.find(x=>x.id===currentManhoId);
+  const ch=m.chapters.find(c=>c.id===currentChapterId);
+  sections.reader.innerHTML=`<button onclick="switchSection('manho')" style="margin-bottom:10px;background:#ff4757;color:#fff;padding:10px;border:none;border-radius:8px;">رجوع</button>
+    <img src="${ch.images[currentPage]}">
+    <div class="nav-buttons">
+      <button onclick="changePage(-1)" ${currentPage===0?'disabled':''}>السابق</button>
+      <button onclick="changePage(1)" ${currentPage===ch.images.length-1?'disabled':''}>التالي</button>
+    </div>`;
+}
 
-  // تبديل الأقسام مع تحديث التنقل
-  function switchSection(section) {
-    // إخفاء كل الأقسام
-    Object.values(sections).forEach(sec => {
-      sec.classList.remove("active");
-    });
-    // إظهار القسم المحدد
-    if (section === "manho-detail" && currentManhoId === null) {
-      // لو ما اخترت مانهو، ارجع للصفحة الرئيسية
-      section = "home";
-    }
-    sections[section].classList.add("active");
-    currentSection = section;
+function changePage(dir){
+  const m=manhos.find(x=>x.id===currentManhoId);
+  const ch=m.chapters.find(c=>c.id===currentChapterId);
+  currentPage+=dir;
+  if(currentPage<0)currentPage=0;
+  if(currentPage>=ch.images.length)currentPage=ch.images.length-1;
+  updateReader();
+}
 
-    // تحديث أزرار التنقل
-    Object.entries(navButtons).forEach(([key, btn]) => {
-      if (key === section) btn.classList.add("active");
-      else btn.classList.remove("active");
-    });
-  }
+// البحث
+document.getElementById('search').addEventListener('input',e=>buildHome(e.target.value));
 
-  // بناء الصفحة الرئيسية
-  function buildHome() {
-    const container = sections.home;
-    container.innerHTML = "";
-    manhos.forEach(manho => {
-      const card = document.createElement("div");
-      card.className = "manho-card";
-      card.onclick = () => {
-        currentManhoId = manho.id;
-        buildManhoDetail(manho.id);
-        switchSection("manho-detail");
-      };
-      card.innerHTML = `
-        <img class="manho-cover" src="${manho.cover}" alt="${manho.title}" />
-        <div class="manho-info">
-          <div class="manho-title">${manho.title}</div>
-          <div class="manho-desc">${manho.description}</div>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  // بناء صفحة تفاصيل مانهو
-  function buildManhoDetail(id) {
-    const manho = manhos.find(m => m.id === id);
-    if (!manho) return;
-    const container = sections.manhoDetail;
-    container.innerHTML = `
-      <img src="${manho.cover}" alt="${manho.title}" class="cover-large" />
-      <h2>${manho.title}</h2>
-      <p class="description">${manho.description}</p>
-      <h3>الفصول</h3>
-      <ul class="chapter-list">
-        ${manho.chapters.map(ch => `<li><button onclick="openChapter(${manho.id},${ch.id})">${ch.title}</button></li>`).join('')}
-      </ul>
-    `;
-  }
-
-  // بناء صفحة الفصول الجديدة
-  function buildLatestChapters() {
-    const container = sections.latestChapters;
-    container.innerHTML = "<h2>الفصول الجديدة</h2><ul></ul>";
-    const ul = container.querySelector("ul");
-    ul.innerHTML = "";
-
-    // اجمع آخر فصل من كل مانهو
-    manhos.forEach(manho => {
-      if (manho.chapters.length === 0) return;
-      const lastChapter = manho.chapters[manho.chapters.length - 1];
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <img src="${manho.cover}" alt="${manho.title}" />
-        <div class="chapter-info">
-          <div class="chapter-title">${lastChapter.title}</div>
-          <div class="manho-name">${manho.title}</div>
-        </div>
-      `;
-      li.onclick = () => openChapter(manho.id, lastChapter.id);
-      ul.appendChild(li);
-    });
-  }
-
-  // فتح قارئ الفصل
-  function openChapter(manhoId, chapterId) {
-    const manho = manhos.find(m => m.id === manhoId);
-    if (!manho) return;
-    const chapter = manho.chapters.find(c => c.id === chapterId);
-    if (!chapter) return;
-
-    currentManhoId = manhoId;
-    currentChapterId = chapterId;
-    currentPageIndex = 0;
-
-    updateReader();
-    switchSection("reader");
-  }
-
-  // تحديث قارئ الفصل
-  function updateReader() {
-    const manho = manhos.find(m => m.id === currentManhoId);
-    const chapter = manho.chapters.find(c => c.id === currentChapterId);
-    if (!chapter) return;
-    const img = document.createElement("img");
-    const reader = sections.reader;
-
-    // فقط صورة واحدة في قارئ القسم، نظف القديم
-    reader.innerHTML = `
-      <button class="close-btn" onclick="closeReader()">رجوع</button>
-      <img id="reader-image" src="${chapter.images[currentPageIndex]}" alt="${chapter.title} - صفحة ${currentPageIndex + 1}" />
-      <div class="nav-buttons">
-        <button id="prev-page" onclick="changePage(-1)">السابق</button>
-        <button id="next-page" onclick="changePage(1)">التالي</button>
-      </div>
-    `;
-
-    // تعطيل أزرار التنقل حسب الصفحة الحالية
-    document.getElementById("prev-page").disabled = currentPageIndex === 0;
-    document.getElementById("next-page").disabled = currentPageIndex === chapter.images.length - 1;
-  }
-
-  // تغيير صفحة قارئ الفصل
-  function changePage(dir) {
-    const manho = manhos.find(m => m.id === currentManhoId);
-    const chapter = manho.chapters.find(c => c.id === currentChapterId);
-    if (!chapter) return;
-    currentPageIndex += dir;
-    if (currentPageIndex < 0) currentPageIndex = 0;
-    if (currentPageIndex >= chapter.images.length) currentPageIndex = chapter.images.length - 1;
-    const img = document.getElementById("reader-image");
-    img.src = chapter.images[currentPageIndex];
-    img.alt = `${chapter.title} - صفحة ${currentPageIndex + 1}`;
-
-    document.getElementById("prev-page").disabled = currentPageIndex === 0;
-    document.getElementById("next-page").disabled = currentPageIndex === chapter.images.length - 1;
-  }
-
-  // إغلاق قارئ الفصل والرجوع للصفحة الأخيرة (عادة الرئيسية)
-  function closeReader() {
-    switchSection("home");
-  }
-
-  // بدء التطبيق
-  buildHome();
-  buildLatestChapters();
-  switchSection("home");
+// تشغيل
+buildHome();
+buildLatest();
 </script>
 
 </body>
