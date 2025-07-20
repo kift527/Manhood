@@ -5,136 +5,124 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>موقع مانهو</title>
 <style>
-body {margin:0;font-family:'Segoe UI',sans-serif;background:#0d0d0d;color:#fff;}
-header {position:fixed;top:0;left:0;right:0;background:#1c1c1c;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;z-index:1000;border-bottom:2px solid #ff4757;}
-header h1 {margin:0;font-size:20px;color:#ff4757;}
-header input {flex:1;margin-left:10px;padding:8px;border:none;border-radius:6px;background:#2a2a2a;color:#fff;}
-nav {position:fixed;bottom:0;left:0;right:0;background:#1c1c1c;display:flex;justify-content:space-around;padding:10px 0;border-top:2px solid #ff4757;}
-nav button {background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;}
+body {margin:0;font-family:sans-serif;background:#111;color:#fff;}
+header {background:#222;padding:10px;text-align:center;position:fixed;top:0;width:100%;z-index:100;}
+header h1 {margin:0;color:#ff4757;font-size:20px;}
+nav {background:#222;position:fixed;bottom:0;width:100%;display:flex;justify-content:space-around;padding:10px 0;}
+nav button {background:none;border:none;color:#bbb;font-size:14px;}
 nav button.active {color:#ff4757;}
-main {padding:65px 10px 70px;max-width:500px;margin:auto;}
+main {padding:60px 10px 60px;}
 .section {display:none;}
 .section.active {display:block;}
-.card {background:#1c1c1c;margin-bottom:15px;border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.4);}
+.card {background:#1c1c1c;margin-bottom:15px;border-radius:8px;overflow:hidden;cursor:pointer;}
 .card img {width:100%;display:block;}
-.card h3 {margin:10px;font-size:18px;color:#ff6b81;}
-.card p {margin:0 10px 10px;font-size:14px;color:#ccc;line-height:1.4;}
-button.chapter-btn {width:100%;padding:10px;margin:5px 0;background:#ff4757;border:none;border-radius:8px;color:#fff;font-size:16px;}
-#reader img {width:100%;border-radius:10px;margin-bottom:10px;}
-#reader .nav-buttons {display:flex;justify-content:space-between;gap:10px;}
-#reader .nav-buttons button {flex:1;background:#ff4757;border:none;color:#fff;padding:10px;border-radius:8px;}
+.card h3 {margin:10px;font-size:16px;color:#ff6b81;}
+.card p {margin:0 10px 10px;font-size:14px;color:#ccc;}
+button.chapter-btn {width:100%;padding:10px;margin:5px 0;background:#ff4757;border:none;border-radius:6px;color:#fff;}
+#reader img {width:100%;border-radius:6px;margin-bottom:10px;}
+#reader .nav-buttons {display:flex;justify-content:space-between;}
+#reader .nav-buttons button {flex:1;margin:5px;background:#ff4757;color:#fff;border:none;padding:10px;border-radius:6px;}
 </style>
 </head>
 <body>
 
 <header>
   <h1>مانهو</h1>
-  <input type="text" id="search" placeholder="ابحث عن مانهو...">
 </header>
 
 <nav>
-  <button id="btn-home" class="active" onclick="switchSection('home')">الرئيسية</button>
-  <button id="btn-manho" onclick="switchSection('manho')">المانهو</button>
-  <button id="btn-latest" onclick="switchSection('latest')">فصول جديدة</button>
+  <button id="btn-home" class="active" onclick="showSection('home')">الرئيسية</button>
+  <button id="btn-latest" onclick="showSection('latest')">الفصول الجديدة</button>
 </nav>
 
 <main>
   <section id="home" class="section active"></section>
-  <section id="manho" class="section"></section>
   <section id="latest" class="section"></section>
+  <section id="details" class="section"></section>
   <section id="reader" class="section"></section>
 </main>
 
 <script>
 const manhos = [
-  {id:1,title:"مانهو القمر",cover:"https://via.placeholder.com/400x600?text=القمر",description:"قصة مثيرة عن مغامرات تحت ضوء القمر.",chapters:[
-    {id:101,title:"الفصل الأول",images:["https://via.placeholder.com/800x1200?text=الفصل1-1","https://via.placeholder.com/800x1200?text=الفصل1-2"]},
-    {id:102,title:"الفصل الثاني",images:["https://via.placeholder.com/800x1200?text=الفصل2-1"]}
+  {id:1,title:"مانهو القمر",cover:"https://via.placeholder.com/400x600?text=القمر",description:"مغامرة تحت ضوء القمر.",chapters:[
+    {id:101,title:"الفصل 1",images:["https://via.placeholder.com/800x1200?text=صفحة1","https://via.placeholder.com/800x1200?text=صفحة2"]},
+    {id:102,title:"الفصل 2",images:["https://via.placeholder.com/800x1200?text=صفحة1"]}
   ]},
-  {id:2,title:"مانهو الشروق",cover:"https://via.placeholder.com/400x600?text=الشروق",description:"رحلة مليئة بالتحديات مع شروق الشمس.",chapters:[
-    {id:201,title:"الفصل الأول",images:["https://via.placeholder.com/800x1200?text=الفصل1-1"]}
+  {id:2,title:"مانهو الشروق",cover:"https://via.placeholder.com/400x600?text=الشروق",description:"قصة مليئة بالتحديات.",chapters:[
+    {id:201,title:"الفصل 1",images:["https://via.placeholder.com/800x1200?text=صفحة1"]}
   ]}
 ];
 
-let currentManhoId = null, currentChapterId = null, currentPage = 0;
+let currentManho = null;
+let currentChapter = null;
+let currentPage = 0;
 
-const sections = {
-  home: document.getElementById('home'),
-  manho: document.getElementById('manho'),
-  latest: document.getElementById('latest'),
-  reader: document.getElementById('reader')
-};
-
-function switchSection(sec){
-  Object.values(sections).forEach(s=>s.classList.remove('active'));
-  sections[sec].classList.add('active');
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  document.getElementById('btn-'+sec).classList.add('active');
+  if(id==='home') document.getElementById('btn-home').classList.add('active');
+  if(id==='latest') document.getElementById('btn-latest').classList.add('active');
 }
 
-function buildHome(filter=""){
-  sections.home.innerHTML="";
-  manhos.filter(m=>m.title.includes(filter)).forEach(m=>{
-    const card=document.createElement('div');
-    card.className='card';
-    card.innerHTML=`<img src="${m.cover}"><h3>${m.title}</h3><p>${m.description}</p>`;
-    card.onclick=()=>{currentManhoId=m.id;buildManho();switchSection('manho');};
-    sections.home.appendChild(card);
-  });
-}
-
-function buildManho(){
-  const m=manhos.find(x=>x.id===currentManhoId);
-  sections.manho.innerHTML=`<h2 style="color:#ff6b81">${m.title}</h2><img src="${m.cover}" width="100%"><p>${m.description}</p>`+
-    m.chapters.map(ch=>`<button class="chapter-btn" onclick="openChapter(${m.id},${ch.id})">${ch.title}</button>`).join('');
-}
-
-function buildLatest(){
-  sections.latest.innerHTML="";
+function buildHome() {
+  const home = document.getElementById('home');
+  home.innerHTML = '';
   manhos.forEach(m=>{
-    if(m.chapters.length>0){
-      const ch=m.chapters[m.chapters.length-1];
-      const card=document.createElement('div');
-      card.className='card';
-      card.innerHTML=`<img src="${m.cover}"><h3>${ch.title}</h3><p>${m.title}</p>`;
-      card.onclick=()=>openChapter(m.id,ch.id);
-      sections.latest.appendChild(card);
-    }
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<img src="${m.cover}"><h3>${m.title}</h3><p>${m.description}</p>`;
+    card.onclick = ()=>openDetails(m.id);
+    home.appendChild(card);
   });
 }
 
-function openChapter(mId,cId){
-  const m=manhos.find(x=>x.id===mId);
-  const ch=m.chapters.find(c=>c.id===cId);
-  currentManhoId=mId;currentChapterId=cId;currentPage=0;
-  updateReader();
-  switchSection('reader');
+function buildLatest() {
+  const latest = document.getElementById('latest');
+  latest.innerHTML = '';
+  manhos.forEach(m=>{
+    const last = m.chapters[m.chapters.length-1];
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<img src="${m.cover}"><h3>${last.title}</h3><p>${m.title}</p>`;
+    card.onclick = ()=>openChapter(m.id,last.id);
+    latest.appendChild(card);
+  });
 }
 
-function updateReader(){
-  const m=manhos.find(x=>x.id===currentManhoId);
-  const ch=m.chapters.find(c=>c.id===currentChapterId);
-  sections.reader.innerHTML=`<button onclick="switchSection('manho')" style="margin-bottom:10px;background:#ff4757;color:#fff;padding:10px;border:none;border-radius:8px;">رجوع</button>
-    <img src="${ch.images[currentPage]}">
-    <div class="nav-buttons">
+function openDetails(id) {
+  currentManho = manhos.find(m=>m.id===id);
+  const details = document.getElementById('details');
+  details.innerHTML = `<h2>${currentManho.title}</h2><img src="${currentManho.cover}" style="width:100%"><p>${currentManho.description}</p>` +
+    currentManho.chapters.map(ch=>`<button class="chapter-btn" onclick="openChapter(${currentManho.id},${ch.id})">${ch.title}</button>`).join('');
+  showSection('details');
+}
+
+function openChapter(mId, cId) {
+  currentManho = manhos.find(m=>m.id===mId);
+  currentChapter = currentManho.chapters.find(c=>c.id===cId);
+  currentPage = 0;
+  updateReader();
+  showSection('reader');
+}
+
+function updateReader() {
+  const reader = document.getElementById('reader');
+  reader.innerHTML = `<button onclick="showSection('details')" style="background:#ff4757;color:#fff;padding:8px;border:none;border-radius:6px;margin-bottom:10px;">رجوع</button>` +
+    `<img src="${currentChapter.images[currentPage]}">` +
+    `<div class="nav-buttons">
       <button onclick="changePage(-1)" ${currentPage===0?'disabled':''}>السابق</button>
-      <button onclick="changePage(1)" ${currentPage===ch.images.length-1?'disabled':''}>التالي</button>
+      <button onclick="changePage(1)" ${currentPage===currentChapter.images.length-1?'disabled':''}>التالي</button>
     </div>`;
 }
 
-function changePage(dir){
-  const m=manhos.find(x=>x.id===currentManhoId);
-  const ch=m.chapters.find(c=>c.id===currentChapterId);
-  currentPage+=dir;
-  if(currentPage<0)currentPage=0;
-  if(currentPage>=ch.images.length)currentPage=ch.images.length-1;
+function changePage(dir) {
+  currentPage += dir;
+  if(currentPage < 0) currentPage = 0;
+  if(currentPage >= currentChapter.images.length) currentPage = currentChapter.images.length - 1;
   updateReader();
 }
 
-// البحث
-document.getElementById('search').addEventListener('input',e=>buildHome(e.target.value));
-
-// تشغيل
 buildHome();
 buildLatest();
 </script>
