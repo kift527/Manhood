@@ -50,17 +50,28 @@ const manhos = [
         id: 101,
         title: "الفصل الأول",
         images: [
-          "https://via.placeholder.com/800x1200?text=Chapter+1+Page+1",
-          "https://via.placeholder.com/800x1200?text=Chapter+1+Page+2",
-          "https://via.placeholder.com/800x1200?text=Chapter+1+Page+3"
-        ]
-      },
-      {
-        id: 102,
-        title: "الفصل الثاني",
-        images: [
-          "https://via.placeholder.com/800x1200?text=Chapter+2+Page+1",
-          "https://via.placeholder.com/800x1200?text=Chapter+2+Page+2"
+          "https://i.postimg.cc/dV2tpMkF/IMG-1705.jpg",
+          "https://i.postimg.cc/R0vVzPKH/IMG-1707.jpg",
+          "https://i.postimg.cc/JhK77b5d/IMG-1708.jpg",
+          "https://i.postimg.cc/gJTY8m5V/IMG-1709.jpg",
+          "https://i.postimg.cc/LXX9Jny4/IMG-1710.jpg",
+          "https://i.postimg.cc/Kj3m5CSd/IMG-1711.jpg",
+          "https://i.postimg.cc/8k7v351V/IMG-1712.jpg",
+          "https://i.postimg.cc/Rqr4pGvq/IMG-1713.jpg",
+          "https://i.postimg.cc/BQDKSVLY/IMG-1714.jpg",
+          "https://i.postimg.cc/05hSqsQK/IMG-1715.jpg",
+          "https://i.postimg.cc/RFVFwP0B/IMG-1717.jpg",
+          "https://i.postimg.cc/DfpWPKsY/IMG-1718.jpg",
+          "https://i.postimg.cc/sg7vzQLt/IMG-1719.jpg",
+          "https://i.postimg.cc/tT2scKcJ/IMG-1720.jpg",
+          "https://i.postimg.cc/HsJrSP9W/IMG-1721.jpg",
+          "https://i.postimg.cc/yxGk1Fsz/IMG-1722.jpg",
+          "https://i.postimg.cc/Bv3tnZ9t/IMG-1723.jpg",
+          "https://i.postimg.cc/d3gVPwjs/IMG-1724.jpg",
+          "https://i.postimg.cc/nhbh3VLT/IMG-1725.jpg",
+          "https://i.postimg.cc/Qt4MmpBW/IMG-1726.jpg",
+          "https://i.postimg.cc/jdJj6nRL/IMG-1727.jpg",
+          "https://i.postimg.cc/kMH4tv30/IMG-1728.jpg"
         ]
       }
     ]
@@ -123,32 +134,41 @@ function openDetails(id) {
 
 function openChapter(mId, cId) {
   currentManho = manhos.find(m => m.id === mId);
-  currentChapter = currentManho.chapters.find(c => c.id === cId);
+  currentChapter = currentManho.chapters.find(ch => ch.id === cId);
   currentPage = 0;
-  updateReader();
+  showPage();
   switchSection('reader');
 }
 
-function updateReader() {
+function showPage() {
   const reader = document.getElementById('reader');
-  reader.innerHTML = `<button onclick="switchSection('details')" style="background:#ff4757;color:#fff;padding:8px;border:none;border-radius:6px;margin-bottom:10px;cursor:pointer;">رجوع</button>` +
-    `<img src="${currentChapter.images[currentPage]}" alt="صفحة مانهو">` +
-    `<div class="nav-buttons">
-      <button onclick="changePage(-1)" ${currentPage === 0 ? 'disabled' : ''}>السابق</button>
-      <button onclick="changePage(1)" ${currentPage === currentChapter.images.length - 1 ? 'disabled' : ''}>التالي</button>
-    </div>`;
+  reader.innerHTML = `
+    <h2>${currentChapter.title} - صفحة ${currentPage + 1} من ${currentChapter.images.length}</h2>
+    <img src="${currentChapter.images[currentPage]}" alt="Page ${currentPage + 1}">
+    <div class="nav-buttons">
+      <button onclick="prevPage()" ${currentPage === 0 ? 'disabled' : ''}>السابق</button>
+      <button onclick="nextPage()" ${currentPage === currentChapter.images.length - 1 ? 'disabled' : ''}>التالي</button>
+    </div>
+    <button style="margin-top:20px; background:#444; border:none; padding:10px; border-radius:6px; color:#fff; cursor:pointer;" onclick="openDetails(currentManho.id)">رجوع للتفاصيل</button>
+  `;
 }
 
-function changePage(dir) {
-  currentPage += dir;
-  if (currentPage < 0) currentPage = 0;
-  if (currentPage >= currentChapter.images.length) currentPage = currentChapter.images.length - 1;
-  updateReader();
+function nextPage() {
+  if (currentPage < currentChapter.images.length - 1) {
+    currentPage++;
+    showPage();
+  }
+}
+
+function prevPage() {
+  if (currentPage > 0) {
+    currentPage--;
+    showPage();
+  }
 }
 
 buildHome();
 buildLatest();
-switchSection('home');
 </script>
 
 </body>
